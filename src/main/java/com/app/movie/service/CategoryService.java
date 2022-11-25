@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.grupo10.app.rents.service;
+package com.app.movie.service;
 
-import com.grupo10.app.rents.entities.Category;
-import com.grupo10.app.rents.interfaces.ICategoryRepository;
+import com.app.movie.dto.ResponseDto;
+import com.app.movie.entities.Category;
+import com.app.movie.interfaces.ICategoryRepository;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +26,15 @@ public class CategoryService {
         return response;
     }
 
-    public Category create(Category request) {
+    public ResponseDto create(Category request) {
 
-        return repository.save(request);
+        Category newCategory = repository.save(request);
+
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.status=true;
+        responseDto.message="Categoría creada correctamente";
+        responseDto.id= newCategory.getId();
+        return responseDto;
 
     }
 
@@ -41,7 +47,7 @@ public class CategoryService {
         return categoryToUpdate;
     }
 
-    public Boolean delete(Integer id) {
+    public Boolean delete(String id) {
         repository.deleteById(id);
         Boolean deleted = true;
         return deleted;

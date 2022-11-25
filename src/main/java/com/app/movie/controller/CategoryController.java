@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.grupo10.app.rents.controller;
+package com.app.movie.controller;
 
-import com.grupo10.app.rents.entities.Category;
-import com.grupo10.app.rents.interfaces.ICategoryRepository;
-import com.grupo10.app.rents.service.CategoryService;
+import com.app.movie.dto.ResponseDto;
+import com.app.movie.entities.Category;
+import com.app.movie.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,35 +25,34 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Andres
  */
 @RestController
-@RequestMapping("/api/Category")
+@RequestMapping("/api/category")
 @CrossOrigin(origins = "*")
 public class CategoryController {
 
     @Autowired
     CategoryService service;
 
-    @GetMapping("/all")
+    @GetMapping("")
     public Iterable<Category> get() {
         Iterable<Category> response = service.get();
-
         return response;
     }
 
-    @PostMapping("/save")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Category create(@RequestBody Category request) {
+    public ResponseDto create(@RequestBody Category request) {
         return service.create(request);
     }
 
-    @PutMapping("/update")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public Category update(@RequestBody Category request) {
         return service.update(request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Integer id) {
+    public void delete(@PathVariable("id") String id) {
         service.delete(id);
     }
 
