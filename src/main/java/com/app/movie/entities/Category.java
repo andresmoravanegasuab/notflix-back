@@ -33,6 +33,7 @@ public class Category implements Serializable {
     private String id;
     private String name;
     private String description;
+    private Integer ageMinimum;
     
     //@OneToMany(cascade={CascadeType.PERSIST},mappedBy="category")
     //@JsonIgnoreProperties("category")

@@ -4,14 +4,14 @@
  */
 package com.app.movie.interfaces;
 
-import com.app.movie.entities.Category;
+import com.app.movie.entities.Movie;
+import com.app.movie.entities.Score;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author Andres
  */
-public interface ICategoryRepository extends MongoRepository<Category, String> {
+public interface IScoreRepository extends MongoRepository<Score, String> {
     
 }
