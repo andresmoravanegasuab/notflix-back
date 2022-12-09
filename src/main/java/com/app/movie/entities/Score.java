@@ -24,5 +24,4 @@ public class Score {
     private String state;
     private Client client;
     private Movie movie;
-    private String testdata;
 }
