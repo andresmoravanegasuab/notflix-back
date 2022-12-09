@@ -4,7 +4,9 @@
  */
 package com.app.movie.controller;
 
-import com.app.movie.dto.ResponseDtimport com.app.movie.entities.Movie;
+
+import com.app.movie.dto.ResponseDto;
+import com.app.movie.entities.Movie;
 import com.app.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
