@@ -5,6 +5,7 @@
 package com.app.movie.controller;
 
 import com.app.movie.dto.ResponseDto;
+import com.app.movie.dto.ScoreDto;
 import com.app.movie.entities.Movie;
 import com.app.movie.entities.Score;
 import com.app.movie.service.MovieService;
@@ -32,10 +33,7 @@ public class ScoreController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto create(@RequestBody Score request) {
-        if(request.getScore().intValue()>4){
-            System.out.println("mayor a 4");
-        }
+    public ResponseDto create(@RequestBody ScoreDto request) {
         return service.create(request);
     }
 

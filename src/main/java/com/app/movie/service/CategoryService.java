@@ -4,12 +4,18 @@
  */
 package com.app.movie.service;
 
+import com.app.movie.dto.ReportCategoryMovies;
 import com.app.movie.dto.ResponseDto;
 import com.app.movie.entities.Category;
+import com.app.movie.entities.Movie;
 import com.app.movie.interfaces.ICategoryRepository;
 
+import com.app.movie.interfaces.IMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,9 +27,29 @@ public class CategoryService {
     @Autowired
     ICategoryRepository repository;
 
+    @Autowired
+    IMovieRepository movieRepository;
+
     public Iterable<Category> get() {
-        Iterable<Category> response = repository.findAll();
-        return response;
+        Iterable<Category> response;
+
+        Iterable<Movie> movies = movieRepository.findAll();
+        List<Category> categories = new ArrayList<>();
+        for (Movie movie: movies) {
+            if(movie.getCategories()!=null){
+                for (Category cat:movie.getCategories()) {
+                    if(!categories.stream().anyMatch(x->x.getName().equals(cat.getName()))){
+                        Category currentCategory= new Category();
+                        currentCategory.setName(cat.getName());
+                        currentCategory.setDescription(cat.getDescription());
+                        currentCategory.setAgeMinimum(cat.getAgeMinimum());
+                        categories.add(currentCategory);
+                    }
+                }
+            }
+        }
+
+        return categories;
     }
 
     public ResponseDto create(Category request) {
