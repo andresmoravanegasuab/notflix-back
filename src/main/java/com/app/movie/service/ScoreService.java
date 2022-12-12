@@ -41,24 +41,24 @@ public class ScoreService {
 
     public ResponseDto create(ScoreDto request) {
         ResponseDto response = new ResponseDto();
+        response.status=false;
         if(request.score<0 || request.score>10){
-            response.status=false;
             response.message="La calificación enviada no está dentro de los valores esperados";
         }else{
             Score score = new Score();
-
             Optional<Movie> movie = movieRepository.findById(request.movieId);
             Optional<Client> client = clientRepository.findById(request.clientId);
-            if(movie.isPresent()){
-                //score.setMovie(movie);
-                //score.setClient(client);
+            if(movie.isPresent() && client.isPresent()){
+                //realizar validación de si ya existe la calificación...
+                score.setState("activo");
+                score.setScore(request.score);
+                score.setMovie(movie.get());
+                score.setClient(client.get());
                 repository.save(score);
                 response.status=true;
                 response.message="Calificación guardada correctamente";
                 response.id= score.getId();
             }
-
-
         }
         return response;
     }
