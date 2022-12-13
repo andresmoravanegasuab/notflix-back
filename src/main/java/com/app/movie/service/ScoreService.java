@@ -27,6 +27,9 @@ public class ScoreService {
     @Autowired
     ScoreRepository repository;
 
+    @Autowired
+    ClientService clientService;
+
 
     @Autowired
     MovieRepository movieRepository;
@@ -39,7 +42,7 @@ public class ScoreService {
         return response;
     }
 
-    public ResponseDto create(ScoreDto request) {
+    public ResponseDto create(ScoreDto request,String authorization) {
         ResponseDto response = new ResponseDto();
         response.status=false;
         if(request.score<0 || request.score>10){
@@ -47,7 +50,7 @@ public class ScoreService {
         }else{
             Score score = new Score();
             Optional<Movie> movie = movieRepository.findById(request.movieId);
-            Optional<Client> client = clientRepository.findById(request.clientId);
+            Optional<Client> client = clientService.getByCredential(authorization);
             if(movie.isPresent() && client.isPresent()){
                 //realizar validación de si ya existe la calificación...
                 score.setState("activo");

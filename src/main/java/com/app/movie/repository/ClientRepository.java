@@ -29,6 +29,11 @@ public class ClientRepository {
         Optional<Client> response= repository.findById(id);
         return response;
     }
+
+    public Optional<Client> findByEmail(String email){
+        Optional<Client> response= repository.findByEmail(email);
+        return response;
+    }
     
     public Boolean existsById(String id){
         return repository.existsById(id);

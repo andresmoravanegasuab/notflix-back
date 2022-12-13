@@ -4,35 +4,53 @@
  */
 package com.app.movie.service;
 
+import com.app.movie.dto.AuthDto;
+import com.app.movie.dto.AuthResponseDto;
 import com.app.movie.dto.ReportClientDto;
 import com.app.movie.entities.Client;
-
 import com.app.movie.repository.ClientRepository;
-
-
-import java.util.Optional;
-
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * @author Andres
  */
 @Service
-public class ClientService {
+public class AuthService {
 
     @Autowired
     ClientRepository repository;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public Iterable<Client> get() {
-        Iterable<Client> response = repository.getAll();
+    public AuthResponseDto check(AuthDto request) {
+        Optional<Client> client = checkCredential(request.user,request.password);
+        AuthResponseDto response = new AuthResponseDto();
+        if(client !=null && client.isPresent()){
+            response.id=client.get().getId();
+            response.name=client.get().getName()+" "+client.get().getLastName();
+            response.email=client.get().getEmail();
+            response.token=getToken(client.get());
+        }
         return response;
+    }
+
+    private String getToken(Client client){
+        return "";
+    }
+
+    public Optional<Client> checkCredential(String user,String password) {
+
+        Optional<Client> client = repository.findByEmail(user);
+        if(!matchPass(password,client.get().getPassword())){
+            return null;
+        }
+        return client;
     }
 
     public Optional<Client> getByCredential(String credential) {
@@ -45,42 +63,6 @@ public class ClientService {
             return null;
         }
         return client;
-    }
-
-    public ReportClientDto getReport() {
-        Optional<Client> client = repository.findById("6380442df71ad74770fc57e1");
-        ReportClientDto reportClientDto = new ReportClientDto();
-        reportClientDto.birthDate = client.get().getBirthDate();
-        reportClientDto.email = client.get().getEmail();
-        reportClientDto.id = client.get().getId();
-        return reportClientDto;
-    }
-
-    public Client create(Client request) {
-        request.setPassword(encrypt(request.getPassword()));
-        return repository.save(request);
-
-    }
-
-    public Client update(Client client) {
-        Client clientToUpdate = new Client();
-
-        Optional<Client> currentClient = repository.findById(client.getId());
-        if (!currentClient.isEmpty()) {
-            clientToUpdate = client;
-            clientToUpdate = repository.save(clientToUpdate);
-        }
-        return clientToUpdate;
-    }
-
-    public Boolean delete(String id) {
-        repository.deleteById(id);
-        Boolean deleted = true;
-        return deleted;
-    }
-
-    private String encrypt(String pass){
-        return this.passwordEncoder.encode(pass);
     }
 
     private Boolean matchPass(String pass,String dbPass){

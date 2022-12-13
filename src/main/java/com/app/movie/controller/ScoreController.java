@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  *
  * @author Andres
@@ -33,8 +35,8 @@ public class ScoreController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto create(@RequestBody ScoreDto request) {
-        return service.create(request);
+    public ResponseDto create(@RequestBody ScoreDto request,@RequestHeader(value="authorization") String authorization) {
+        return service.create(request,authorization);
     }
 
     @PutMapping("")
