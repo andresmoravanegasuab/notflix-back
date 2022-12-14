@@ -29,25 +29,32 @@ public class AuthService {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AuthResponseDto check(AuthDto request) {
-        Optional<Client> client = checkCredential(request.user,request.password);
         AuthResponseDto response = new AuthResponseDto();
-        if(client !=null && client.isPresent()){
-            response.id=client.get().getId();
-            response.name=client.get().getName()+" "+client.get().getLastName();
-            response.email=client.get().getEmail();
-            response.token=getToken(client.get());
+        if (
+                request.user != null && !request.user.equals("") && request.password != null && !request.password.equals("")) {
+            Optional<Client> client = checkCredential(request.user, request.password);
+
+            if (client != null && client.isPresent()) {
+                response.id = client.get().getId();
+                response.name = client.get().getName() + " " + client.get().getLastName();
+                response.email = client.get().getEmail();
+                response.token = getToken(request.user, request.password);
+            }
         }
+
         return response;
     }
 
-    private String getToken(Client client){
-        return "";
+    private String getToken(String user, String pass) {
+        String tokenString = user + ":" + pass;
+        byte[] bytesEncoded = Base64.encodeBase64(tokenString.getBytes());
+        return new String(bytesEncoded);
     }
 
-    public Optional<Client> checkCredential(String user,String password) {
+    public Optional<Client> checkCredential(String user, String password) {
 
         Optional<Client> client = repository.findByEmail(user);
-        if(!matchPass(password,client.get().getPassword())){
+        if (!matchPass(password, client.get().getPassword())) {
             return null;
         }
         return client;
@@ -59,13 +66,13 @@ public class AuthService {
         String pass = pair.split(":")[1];
 
         Optional<Client> client = repository.findByEmail(email);
-        if(!matchPass(pass,client.get().getPassword())){
+        if (!matchPass(pass, client.get().getPassword())) {
             return null;
         }
         return client;
     }
 
-    private Boolean matchPass(String pass,String dbPass){
-        return this.passwordEncoder.matches(pass,dbPass);
+    private Boolean matchPass(String pass, String dbPass) {
+        return this.passwordEncoder.matches(pass, dbPass);
     }
 }
