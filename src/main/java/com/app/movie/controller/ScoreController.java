@@ -33,16 +33,21 @@ public class ScoreController {
         return service.get();
     }
 
+    @GetMapping("/check/{movieId}")
+    public Score check(@PathVariable("movieId") String movieId,@RequestHeader(value="authorization") String authorization) {
+        return service.check(movieId,authorization);
+    }
+
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto create(@RequestBody ScoreDto request,@RequestHeader(value="authorization") String authorization) {
         return service.create(request,authorization);
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Score update(@RequestBody Score request) {
-        return service.update(request);
+    public ResponseDto update(@PathVariable("id") String id,@RequestBody Score request) {
+        return service.update(request,id);
     }
 
     @DeleteMapping("/{id}")

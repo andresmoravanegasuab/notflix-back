@@ -18,6 +18,6 @@ import java.util.List;
 public interface IScoreRepository extends MongoRepository<Score, String> {
 
     @Query(value= "{movie.id : ?0,client.id:?1}") // SQL Equivalent : SELECT * FROM Movie select * from Movie where name=?
-    List<Movie> getScoreByMovieAndClient(String movieId,String clientId);
+    Iterable<Score> getScoreByMovieAndClient(String movieId,String clientId);
 
 }
