@@ -33,8 +33,8 @@ public class ScoreRepository {
         return response;
     }
 
-    public Iterable<Score> findByMovieAndClient(String movieId,String clientId){
-        Iterable<Score> response= repository.getScoreByMovieAndClient(movieId,clientId);
+    public List<Score> findByMovieAndClient(String movieId,String clientId){
+        List<Score> response= repository.getScoreByMovieAndClient(movieId,clientId);
         return response;
     }
 
