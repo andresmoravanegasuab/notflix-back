@@ -5,11 +5,13 @@
 package com.app.movie.service;
 
 import com.app.movie.dto.ResponseDto;
+import com.app.movie.entities.Category;
 import com.app.movie.entities.Movie;
 import com.app.movie.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +45,10 @@ public class MovieService {
             response.status=false;
             response.message=MOVIE_REGISTERED;
         }else{
+            //validar que ese id de la categoría exista y lo consulto, una vez que lo consulte lo agrego al elemento de request
+            //
+            List<Category> listFromRequest = new ArrayList<>();
+            request.setCategories(listFromRequest);
             repository.save(request);
             response.status=true;
             response.message=MOVIE_SUCCESS;
